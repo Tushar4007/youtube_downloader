@@ -4,10 +4,13 @@ import yt_dlp
 
 app = Flask(__name__)
 DOWNLOAD_FOLDER = os.path.join(os.getcwd(), 'downloads')
-os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)                                                                                                             @app.route('/')
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
+
+@app.route('/')
 def index():
     return render_template('index.html')
-                                                                            @app.route('/get_formats', methods=['POST'])
+
+@app.route('/get_formats', methods=['POST'])
 def get_formats():
     url = request.form['url']
     try:
@@ -16,7 +19,9 @@ def get_formats():
             info_dict = ydl.extract_info(url, download=False)
             formats = info_dict.get('formats', [])
             video_title = info_dict.get('title')
-            thumbnail = info_dict.get('thumbnail')                                                                                                                  video_audio = []
+            thumbnail = info_dict.get('thumbnail')
+
+            video_audio = []
             video_only = []
             audio_only = []
 
