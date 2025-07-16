@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>YouTube Video Downloader By Devil Creation</title>
+  <style>
+    :root {
+      --bg-light: #DCDCDC;
+      --text-light: #000;
+      --shadow-light: darkblue;
+      --btn-bg-light: #0078D7;
+      --btn-hover-bg-light: #0000FF;
+      --bg-dark: #121212;
+      --text-dark: #EEE;
+      --shadow-dark: #FF69B4;
+      --btn-bg-dark: #bb86fc;
+      --btn-hover-bg-dark: #3700b3;
+    }
+
+body {
+  font-family: 'Poppins', Arial, sans-serif;
+  text-align: center;
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+  color: var(--text-light);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-size: clamp(16px, 2vw, 24px);
+  transition: background 0.3s ease-in-out, color 0.3s ease-in-out, border 0.3s;
+}
+
+body:hover {
+  background: var(--bg-hover);
+  color: var(--text-hover);
+  border-color: var(--accent-color);
+}
+
+ body.dark-mode {
+      background: var(--bg-dark);
+      color: var(--text-dark);
+      border-color: #888;
+    }
+
+/* 🔠 Main Heading Styling */
+h1 {
+  font-size: 52px;
+  font-weight: 800;
+  color: var(--text-light);
+  text-align: center;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 8px var(--shadow-light);
+  transition: text-shadow 0.4s ease, color 0.4s ease, transform 0.3s;
+  cursor: default;
+}
+
+/* 🖱️ Hover Animation: Slight Zoom + Shadow Change */
+h1:hover {
+  color: var(--shadow-dark);
+  text-shadow:
+    0 0 10px var(--shadow-dark),
+    2px 2px 10px var(--shadow-dark);
+  transform: scale(1.03);
+}
+
+/* 🌙 Dark Mode Heading */
+body.dark-mode h1 {
+  color: var(--text-dark);
+  text-shadow: 2px 2px 8px var(--shadow-dark);
+}
+
+/* 🌙 Dark Mode Hover */
+body.dark-mode h1:hover {
+  color: var(--shadow-light);
+  text-shadow:
+    0 0 12px var(--shadow-light),
+    2px 2px 10px var(--shadow-light);
+}
+
+input[type="url"] {
+  padding: 12px 16px;                  /* Extra padding for better UX */
+  width: 80%;
+  max-width: 400px;
+  border-radius: 8px;                  /* Slightly more rounded corners */
+  border: 1px solid #ccc;              /* Softer border color */
+  font-size: 16px;
+  outline: none;                       /* Remove default blue outline */
+  transition: all 0.3s ease;           /* Smooth transitions */
+  background-color: #f9f9f9;           /* Light background */
+  color: #333;                         /* Dark text for contrast */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+}
+
+/* Focused state styling */
+input[type="url"]:focus {
+  border-color: #007BFF;               /* Highlight border on focus */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.4); /* Blue glow effect */
+  background-color: #fff;              /* Brighter on focus */
+}
+ 
+body.dark-mode input[type="url"] {
+  background: #333;                   /* Dark background */
+  color: #eee;                        /* Light text color for contrast */
+  border: 1px solid #555;             /* Subtle border */
+  border-radius: 8px;                 /* Rounded corners */
+  padding: 12px 16px;                 /* Comfortable padding */
+  font-size: 16px;                    /* Clear, readable text */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Depth effect */
+  transition: all 0.3s ease;          /* Smooth animations */
+  outline: none;                      /* Remove default outline */
+}
+
+/* Focus state in dark mode */
+body.dark-mode input[type="url"]:focus {
+  background: #2a2a2a;               /* Slightly brighter for focus */
+  border-color: #66f;                /* Blue border on focus */
+  box-shadow: 0 0 6px rgba(102, 102, 255, 0.5); /* Blue glow */
+}
+
+/* 🌞 Light Mode Button */
+button {
+  padding: 12px 24px;                            /* More comfortable padding */
+  margin: 5px;
+  border: none;
+  border-radius: 8px;                            /* Slightly more rounded corners */
+  background: var(--btn-bg-light);
+  color: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;                              /* Slightly bold for better visibility */
+  transition: all 0.3s ease;                     /* Smooth animation */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);       /* Adds subtle depth */
+}
+
+/* 🖱️ Hover effect in Light Mode */
+button:hover {
+  background: var(--btn-hover-bg-light);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);     /* Enhanced hover effect */
+  transform: translateY(-2px);                   /* Slight lift on hover */
+}
+
+/* 🌙 Dark Mode Button */
+body.dark-mode button {
+  background: var(--btn-bg-dark);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1); /* Lighter shadow in dark */
+}
+
+/* 🖱️ Hover in Dark Mode */
+body.dark-mode button:hover {
+  background: var(--btn-hover-bg-dark);
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+    /* 🎯 Format Button Styling */
+.format-btn {
+  display: block;
+  margin: 8px auto;
+  width: 90%;
+  max-width: 300px;
+  padding: 12px 20px;
+  font-weight: 600;
+  font-size: 15px;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--btn-bg-light);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.format-btn:hover {
+  background-color: var(--btn-hover-bg-light);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* 🌙 Dark mode variant for format buttons */
+body.dark-mode .format-btn {
+  background-color: var(--btn-bg-dark);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode .format-btn:hover {
+  background-color: var(--btn-hover-bg-dark);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* 🧾 Section Title */
+.section-title {
+  margin-top: 30px;
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  color: var(--text-light);
+}
+
+/* 🌓 Dark mode support for section titles */
+body.dark-mode .section-title {
+  color: var(--text-dark);
+}
+
+/* 🧿 Toggle Buttons (Dark Mode & Language) */
+#darkModeToggle,
+#i18nToggle {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  padding: 6px 14px;
+  margin-left: 10px;
+  font-size: 14px;
+  border: 2px solid currentColor;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Aligning both toggle buttons side-by-side */
+#i18nToggle {
+  right: auto;
+  left: 10px;
+}
+
+/* Hover effects for toggles */
+#darkModeToggle:hover,
+#i18nToggle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+/* 🌙 Dark mode toggle button adjustments */
+body.dark-mode #darkModeToggle,
+body.dark-mode #i18nToggle {
+  color: var(--text-dark);
+  border-color: var(--text-dark);
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* 🖼️ Base Image Styling */
+img {
+  max-width: 100%;                            /* Responsive width */
+  height: auto;                               /* Maintain aspect ratio */
+  border: 4px solid #000;                     /* Base border */
+  border-radius: 10px;                        /* Rounded corners */
+  margin: 12px 0;
+  display: block;                             /* Remove inline spacing */
+  transition: all 0.3s ease-in-out;           /* Smooth transitions */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);    /* Subtle depth */
+}
+
+/* 🖱️ Hover Effect */
+img:hover {
+  border: 4px solid rgba(0, 0, 0, 0.6);        /* Lighter border */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);   /* Stronger shadow */
+  transform: scale(1.02);                     /* Slight zoom effect */
+}
+
+/* 🌙 Dark Mode Support */
+body.dark-mode img {
+  border: 4px solid #eee;                     /* Light border in dark mode */
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 0.1);
+}
+
+body.dark-mode img:hover {
+  border: 4px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+}
+
+    .section-title {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+
+
+    #darkModeToggle {
+      right: 10px;
+      border: 2px solid black;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+ }
+
+    #i18nToggle {
+      left: 10px;
+      border: 2px solid black;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+    
+/* New styles for multi-video details */
+#multi-video-details {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Center items horizontally */
+  gap: 20px; /* Space between video items */
+  margin-top: 20px;
+}
+
+.video-item {
+  background-color: var(--bg-light);
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  width: 280px; /* Fixed width for each video item */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; /* Center content within each item */
+  transition: transform 0.2s ease-in-out;
+}
+
+body.dark-mode .video-item {
+  background-color: #2a2a2a;
+  border-color: #555;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.video-item:hover {
+  transform: translateY(-5px);
+}
+
+.video-item h3 {
+  font-size: 1.1em;
+  margin-top: 0;
+  margin-bottom: 10px;
+  color: var(--text-light);
+}
+
+body.dark-mode .video-item h3 {
+  color: var(--text-dark);
+}
+
+.video-item img {
+  width: 100%; /* Make image fill its container */
+  height: 180px; /* Increased height for better visibility */
+  object-fit: cover; /* Cover the area without distortion */
+  border-radius: 8px;
+  margin: 0 auto 10px auto; /* Center horizontally and add bottom margin */
+  border: none; /* Remove default image border */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode .video-item img {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+#multiDownloadBtn {
+  margin: 10px auto; /* Center the button */
+  display: block; /* Make it a block element to apply margin auto */
+}
+
+.video-item .format-select {
+  width: 90%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-top: 10px;
+  font-size: 0.9em;
+  background-color: #f9f9f9;
+  color: #333;
+  text-align: center; /* Center text in dropdown */
+  text-align-last: center; /* For Firefox */
+}
+
+body.dark-mode .video-item .format-select {
+  background-color: #333;
+  color: #eee;
+  border-color: #555;
+}
+
+/* 🌀 Stylish Rotating Circle Spinner */
+#progressCircle {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  border: 6px solid transparent;
+  border-top: 6px solid #007bff;
+  border-right: 6px solid #007bff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  display: none;
+  margin-left: 8px;
+  vertical-align: middle;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+  text-align: center;
+  line-height: 48px;
+  font-size: 16px;
+  color: white;
+  font-weight: bold;
+}
+
+/* Countdown text centered */
+#countdownText {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* 🌀 Animation for spinning effect */
+@keyframes spin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ✅ Success state pulse effect */
+#progress.success {
+  color: green;
+  animation: pulseSuccess 1s ease-out;
+}
+
+@keyframes pulseSuccess {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); color: limegreen; }
+  100% { transform: scale(1); }
+}
+
+/* ❌ Error state shake effect */
+#progress.error {
+  color: red;
+  animation: shakeError 0.4s ease-in-out;
+}
+
+@keyframes shakeError {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  50% { transform: translateX(4px); }
+  75% { transform: translateX(-4px); }
+  100% { transform: translateX(0); }
+}
+
+/* 👻 Horror Effect (for dramatic moments or horror themes) */
+.horror-effect {
+  color: crimson !important;
+  font-weight: bold;
+  text-shadow:
+    0 0 5px red,
+    0 0 10px darkred,
+    2px 2px 4px black;
+  animation: flicker 0.2s infinite alternate;
+}
+
+/* 👻 Flicker animation (like a haunted effect) */
+@keyframes flicker {
+  from { opacity: 1; }
+  to   { opacity: 0.6; transform: scale(1.01); }
+}
+  </style>
+</head>
+<body>
+  <button id="darkModeToggle">🌙 Dark Mode</button>
+  <button id="i18nToggle">🌐 हिंदी</button>
+
+  <h1>YouTube Video Downloader</h1>
+  <form id="urlForm">
+    <input type="url" id="urlInput" placeholder="Enter YouTube URL..." required />
+    <button type="submit" id="fetchBtn">Fetch Formats</button>
+    <br>
+    <span id="progress"></span>
+<br>
+  <span id="progressCircle"></span>
+</form>
+
+  <div id="video-details" style="display:none;">
+    <h3 id="video-title"></h3>
+    <img id="video-thumb" src="" alt="Video Thumbnail" />
+    <div class="section-title">Low Quality Video</div>
+    <div id="video-audio"></div>
+    <div class="section-title">High Quality Video</div>
+    <button class="format-btn" id="high-quality-btn">Download High Quality Video</button>
+    <div class="section-title">Download as MP3</div>
+    <button class="format-btn" id="mp3-download-btn">Download MP3</button>
+    <div class="section-title">Video Only</div>
+    <div id="video-only"></div>
+    <div class="section-title">Audio Only</div>
+    <div id="audio-only"></div>
+  </div>
+
+  <hr>
+
+  <div id="multi-download-section">
+    <h2>Download Multiple Videos</h2>
+    <form id="multiUrlForm">
+        <textarea id="multiUrlInput" rows="8" style="width: 90%; max-width: 600px;" placeholder="Enter multiple YouTube URLs, one per line..."></textarea><br>
+        <button type="button" id="fetchMultiFormatsBtn">Fetch Formats for All</button>
+        <button type="submit" id="multiDownloadBtn" style="display:none;">Download Selected</button>
+        <br>
+        <span id="multiProgress"></span>
+    </form>
+    <div id="multi-video-details"></div>
+  </div>
+
+  <script>
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const i18nToggle = document.getElementById('i18nToggle');
+    const body = document.body;
+    const form = document.getElementById('urlForm');
+    const urlInput = document.getElementById('urlInput');
+    const progressText = document.getElementById('progress');
+    const progressCircle = document.getElementById('progressCircle');
+    const fetchBtn = document.getElementById('fetchBtn');
+    let lastURL = '';
+    let currentLang = 'en';
+
+    const textMap = {
+      en: {
+        title: "YouTube Video Downloader",
+        placeholder: "Enter YouTube URL...",
+        fetch: " Fetch Formats",
+        error: "❌ Invalid YouTube URL!",
+        success: "✔️ Formats fetched successfully!",
+        somethingWrong: "❌ Something went wrong!",
+        mp3: "Download MP3",
+        highQuality: "Download High Quality Video"
+      },
+      hi: {
+        title: "यूट्यूब वीडियो डाउनलोडर",
+        placeholder: "यूट्यूब लिंक दर्ज करें...",
+        fetch: " फॉर्मेट लाएं",
+        error: "❌ अमान्य यूट्यूब लिंक!",
+        success: "✔️ फॉर्मेट मिल गए!",
+        somethingWrong: "❌ कुछ गलत हो गया!",
+        mp3: "MP3 डाउनलोड करें",
+        highQuality: "उच्च गुणवत्ता वीडियो डाउनलोड करें"
+      }
+    };
+
+    function updateLanguage() {
+      const lang = currentLang;
+      document.querySelector("h1").textContent = textMap[lang].title;
+      urlInput.placeholder = textMap[lang].placeholder;
+      fetchBtn.textContent = textMap[lang].fetch;
+      document.getElementById("mp3-download-btn").textContent = textMap[lang].mp3;
+      document.getElementById("high-quality-btn").textContent = textMap[lang].highQuality;
+      i18nToggle.textContent = lang === 'en' ? '🌐 हिंदी' : '🌐 English';
+    }
+
+    i18nToggle.onclick = () => {
+      currentLang = currentLang === 'en' ? 'hi' : 'en';
+      updateLanguage();
+    };
+
+    updateLanguage();
+
+    if (localStorage.getItem('darkMode') === 'enabled') {
+      body.classList.add('dark-mode');
+      darkModeToggle.textContent = '☀️ Light Mode';
+    }
+
+    darkModeToggle.onclick = () => {
+      body.classList.toggle('dark-mode');
+      localStorage.setItem('darkMode', body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
+      darkModeToggle.textContent = body.classList.contains('dark-mode') ? '☀️ Light Mode' : '🌙 Dark Mode';
+    };
+
+    form.onsubmit = async (e) => {
+      e.preventDefault();
+      const url = urlInput.value.trim();
+
+      progressText.innerHTML = '<span id="spinner"></span> ' + textMap[currentLang].fetch;
+      progressCircle.style.display = 'inline-block';
+      progressText.className = '';
+      fetchBtn.disabled = true;
+
+      lastURL = url;
+
+      try {
+        const response = await fetch('/get_formats', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+          body: new URLSearchParams({ url })
+        });
+        const data = await response.json();
+
+        if (data.error) {
+          progressText.textContent = "❌ " + data.error;
+          progressText.className = 'error horror-effect';
+        } else {
+          progressText.textContent = textMap[currentLang].success;
+          progressText.className = 'success';
+          document.getElementById('video-title').textContent = data.title;
+          document.getElementById('video-thumb').src = data.thumbnail;
+          document.getElementById('video-details').style.display = 'block';
+
+          const fillFormats = (divId, formats) => {
+            const div = document.getElementById(divId);
+            div.innerHTML = '';
+            formats.forEach(format => {
+              const btn = document.createElement('button');
+              btn.className = "format-btn";
+              btn.textContent = format.label;
+              btn.onclick = () => downloadVideo(url, format.format_id);
+              div.appendChild(btn);
+            });
+          };
+
+          fillFormats('video-audio', data.video_audio);
+          fillFormats('video-only', data.video_only);
+          fillFormats('audio-only', data.audio_only);
+          urlInput.value = '';
+        }
+      } catch (error) {
+        progressText.textContent = textMap[currentLang].somethingWrong;
+        progressText.className = 'error horror-effect';
+        console.error(error);
+      }
+
+      progressCircle.style.display = 'none';
+      fetchBtn.disabled = false;
+    };
+
+    function downloadVideo(url, format_id) {
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/download';
+      form.innerHTML = `<input type="hidden" name="url" value="${url}">`
+                     + `<input type="hidden" name="format_id" value="${format_id}">`;
+      document.body.appendChild(form);
+      form.submit();
+      form.remove();
+    }
+
+    document.getElementById('high-quality-btn').onclick = () => {
+      if (!lastURL) return alert('Please enter a valid URL first.');
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/download_high_quality';
+      form.innerHTML = `<input type="hidden" name="url" value="${lastURL}">`;
+      document.body.appendChild(form);
+      form.submit();
+      form.remove();
+    };
+
+    document.getElementById('mp3-download-btn').onclick = () => {
+      if (!lastURL) return alert('Please enter a valid URL first.');
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = '/download_mp3';
+      form.innerHTML = `<input type="hidden" name="url" value="${lastURL}">`;
+      document.body.appendChild(form);
+      form.submit();
+      form.remove();
+    };
+
+    document.getElementById('multiUrlForm').onsubmit = async (e) => {
+        e.preventDefault(); // Prevent default form submission
+    };
+
+    document.getElementById('fetchMultiFormatsBtn').onclick = async () => {
+        const urls = document.getElementById('multiUrlInput').value.trim();
+        const multiProgress = document.getElementById('multiProgress');
+        const multiFetchBtn = document.getElementById('fetchMultiFormatsBtn');
+        const multiDownloadBtn = document.getElementById('multiDownloadBtn');
+        const multiVideoDetails = document.getElementById('multi-video-details');
+
+        if (!urls) {
+            multiProgress.textContent = "Please enter at least one URL.";
+            return;
+        }
+
+        multiProgress.textContent = "Fetching formats...";
+        multiFetchBtn.disabled = true;
+        multiDownloadBtn.style.display = 'none';
+        multiVideoDetails.innerHTML = ''; // Clear previous results
+
+        try {
+            const response = await fetch('/get_multiple_formats', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ urls })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                multiProgress.textContent = `Found formats for ${data.length} videos.`;
+                multiDownloadBtn.style.display = 'block'; // Show download button
+                console.log("Received data for multiple formats:", data); // Debugging line
+
+                data.forEach((video, index) => {
+                    const videoDiv = document.createElement('div');
+                    videoDiv.className = 'video-item'; // Add a class for easier selection later
+                    videoDiv.innerHTML = `
+                        <h3>${video.title || 'Unknown Title'}</h3>
+                        <img src="${video.thumbnail}" alt="Video Thumbnail" style="width: 150px; height: auto;">
+                        <input type="hidden" class="video-url" value="${video.url}">
+                        <select class="format-select" data-index="${index}">
+                            <option value="">Select Format</option>
+                            <optgroup label="Video & Audio">
+                                ${video.video_audio.map(f => `<option value="${f.format_id}">${f.label}</option>`).join('')}
+                            </optgroup>
+                            <optgroup label="Video Only">
+                                ${video.video_only.map(f => `<option value="${f.format_id}">${f.label}</option>`).join('')}
+                            </optgroup>
+                            <optgroup label="Audio Only">
+                                ${video.audio_only.map(f => `<option value="${f.format_id}">${f.label}</option>`).join('')}
+                            </optgroup>
+                            <optgroup label="Combined Video & Audio">
+                                ${video.special_video_audio.map(f => `<option value="${f.format_id}">${f.label}</option>`).join('')}
+                            </optgroup>
+                        </select>
+                    `;
+                    multiVideoDetails.appendChild(videoDiv);
+                });
+
+            } else {
+                multiProgress.textContent = "Error: " + (data.error || "Unknown error");
+            }
+        } catch (error) {
+            multiProgress.textContent = "An unexpected error occurred while fetching formats.";
+            console.error(error);
+        }
+
+        multiFetchBtn.disabled = false;
+    };
+
+    document.getElementById('multiDownloadBtn').onclick = async () => {
+        const multiProgress = document.getElementById('multiProgress');
+        const multiDownloadBtn = document.getElementById('multiDownloadBtn');
+        const videoItems = document.querySelectorAll('.video-item');
+        const downloadsToPerform = [];
+
+        videoItems.forEach(item => {
+            const url = item.querySelector('.video-url').value;
+            const formatId = item.querySelector('.format-select').value;
+            if (url && formatId) { // Only add if both URL and format are selected
+                downloadsToPerform.push({ url, format_id: formatId });
+            }
+        });
+
+        if (downloadsToPerform.length === 0) {
+            multiProgress.textContent = "No videos or formats selected for download.";
+            return;
+        }
+
+        multiProgress.textContent = `Initiating downloads for ${downloadsToPerform.length} videos...`;
+        multiDownloadBtn.disabled = true;
+
+        // Send each download request individually or as a batch if backend supports it
+        // For now, sending as a batch to the existing /download_multiple endpoint
+        // Note: The current /download_multiple endpoint in app.py only takes raw URLs.
+        // We need to update it to accept format_ids.
+        const urlsWithFormats = downloadsToPerform.map(d => `${d.url}|${d.format_id}`).join('\n');
+
+        try {
+            const response = await fetch('/download_multiple', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: new URLSearchParams({ urls: urlsWithFormats })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                multiProgress.textContent = data.message;
+            } else {
+                multiProgress.textContent = "Error: " + (data.error || "Unknown error");
+            }
+        } catch (error) {
+            multiProgress.textContent = "An unexpected error occurred during download.";
+            console.error(error);
+        }
+
+        multiDownloadBtn.disabled = false;
+    };
+   
+  </script>
+</body>
+</html>
